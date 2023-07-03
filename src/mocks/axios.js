@@ -19,15 +19,17 @@ mock.onGet('/api/getPrice').reply(config => {
   }
 });
 
-mock.onGet('/api/getUser').reply(config => {
-    const { id } = config.params;
-    const user = users.find(user => user.id === id);
-    if (user) {
-      const { name, region } = user;
-      return [200, { name, region }];
-    } else {
-      return [404, { error: 'User not found' }];
-    }
-  });
+mock.onGet(/\/users\/\d+/).reply(config => {
+  const { id } = config.params;
+  const user = users.find(user => user.id === parseInt(id));
+  if (user) {
+    const { name, region } = user;
+    return [200, { name, region }];
+  } else {
+    return [404, { error: 'User not found' }];
+  }
+});
+
+mock.onGet('/hello').reply(200, 'Hello, World!');
 
 export default mock;
